@@ -1,6 +1,7 @@
 ﻿using driver_sign_in.Models.Dtos;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.CodeAnalysis;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace driver_sign_in.Models.Entities
@@ -14,14 +15,15 @@ namespace driver_sign_in.Models.Entities
         public string CarNumber { get; set; }
         public string DriverFullName { get; set; }
         [ForeignKey("ProductId")]
-        public long ProductId { get; set; }
+        public long productId { get; set; }
         
         public float ProductAmount { get; set; }
 
         [EnumDataType(typeof(StatusesEnum))]
         public StatusesEnum Status { get; set; }
-        public DateTime StatusUpdatedUTC { get; set; }
-        public DateTime? MustBeOnCheckUTC { get; set; }
+        public DateTime StatusUpdatedUtc { get; set; }
+        [AllowNull]
+        public DateTime? MustBeOnCheckUtc { get; set; }
         public DateTime From { get; set; }
         public DateTime To { get; set; }
     }

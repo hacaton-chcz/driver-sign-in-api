@@ -28,14 +28,16 @@ namespace driver_sign_in.Controllers
                     InvoiceId = model.InvoiceId,
                     CarNumber = model.CarNumber,
                     DriverFullName = model.DriverFullName,
-                    ProductId = _context.Products.Where(p => p.Name == model.ProductName).First().Id,
+                    productId = _context.Products.Where(p => p.Name == model.ProductName).First().Id,
                     //ProductId = 0,
                     ProductAmount = model.ProductAmount,
                     Status = StatusesEnum.CREATED,
-                    StatusUpdatedUTC = DateTime.UtcNow,
+                    MustBeOnCheckUtc = null,
+                    StatusUpdatedUtc = DateTime.UtcNow,
                     From = model.From,
                     To = model.To,
                 };
+                Console.WriteLine(invoice);
 
                 await _context.AddAsync(invoice);
                 await _context.SaveChangesAsync();
@@ -49,7 +51,7 @@ namespace driver_sign_in.Controllers
             if (invoice != null & model.IsArrived) 
             {
                 invoice.Status = StatusesEnum.ARRIVED;
-                invoice.StatusUpdatedUTC = DateTime.UtcNow;
+                invoice.StatusUpdatedUtc = DateTime.UtcNow;
                 
                 await _context.SaveChangesAsync();
             }
@@ -62,7 +64,8 @@ namespace driver_sign_in.Controllers
             if (invoice != null & model.IsPassed)
             {
                 invoice.Status = StatusesEnum.PASSED_INSPECTION;
-                invoice.StatusUpdatedUTC = DateTime.UtcNow;
+                invoice.StatusUpdatedUtc = DateTime.UtcNow;
+                invoice.MustBeOnCheckUtc = null;
 
                 await _context.SaveChangesAsync();
             }
