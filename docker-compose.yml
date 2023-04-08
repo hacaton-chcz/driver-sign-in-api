@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  invoices-db-debug:
+    image: postgres:14.2-alpine
+    restart: always
+    container_name: 'invoices-db-debug'
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: Invoices
+    ports:
+      - 10003:5432
