@@ -54,5 +54,18 @@ namespace driver_sign_in.Controllers
                 await _context.SaveChangesAsync();
             }
         }
+
+        [HttpPost("set-passed")]
+        public async Task SetPassedAsync(PassSettingDto model)
+        {
+            var invoice = _context.Invoices.Where(p => p.InvoiceId == model.InvoiceId).First();
+            if (invoice != null & model.IsPassed)
+            {
+                invoice.Status = StatusesEnum.PASSED_INSPECTION;
+                invoice.StatusUpdatedUTC = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }
