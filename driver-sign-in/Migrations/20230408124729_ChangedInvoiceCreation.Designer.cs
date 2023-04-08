@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using driver_sign_in;
@@ -11,9 +12,11 @@ using driver_sign_in;
 namespace driver_sign_in.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230408124729_ChangedInvoiceCreation")]
+    partial class ChangedInvoiceCreation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,7 @@ namespace driver_sign_in.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("driver_sign_in.Models.Entities.InvoiceEntity", b =>
+            modelBuilder.Entity("driver_sign_in.Models.Dtos.InvoiceCreationDto", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -30,36 +33,37 @@ namespace driver_sign_in.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<DateTime>("ArivedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("CarNumber")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<int>("Checkpoint")
+                        .HasColumnType("integer");
 
                     b.Property<string>("DriverFullName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("From")
+                    b.Property<DateTime>("PassFrom")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<decimal>("InvoiceId")
-                        .HasColumnType("numeric(20,0)");
-
-                    b.Property<DateTime?>("MustBeOnCheckUTC")
+                    b.Property<DateTime>("PassTo")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<float>("ProductAmount")
-                        .HasColumnType("real");
 
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("Sender")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("StatusUpdatedUTC")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("To")
+                    b.Property<DateTime?>("StatusUpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -67,7 +71,7 @@ namespace driver_sign_in.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("driver_sign_in.Models.Entities.ProductEntity", b =>
+            modelBuilder.Entity("driver_sign_in.Models.Dtos.ProductCreationDto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

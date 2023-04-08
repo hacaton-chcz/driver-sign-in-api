@@ -1,4 +1,5 @@
 ﻿using driver_sign_in.Models.Dtos;
+using driver_sign_in.Models.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,37 +21,22 @@ namespace driver_sign_in.Controllers
         {
             Console.WriteLine(model);
 
-            CarCreationDto car = new CarCreationDto
+            InvoiceEntity invoice = new InvoiceEntity
             {
-                Id = model.Id,
-                Number = model.CarNumber,
-                IsChecked = false,
+                InvoiceId = model.InvoiceId,
+                CarNumber = model.CarNumber,
+                DriverFullName = model.DriverFullName,
+                ProductId = _context.Products.Where(p => p.Name == model.ProductName).First().Id,
+                //ProductId = 0,
+                ProductAmount = model.ProductAmount,
+                Status = StatusesEnum.CREATED,
+                StatusUpdatedUTC = DateTime.UtcNow,
+                From = model.From,
+                To = model.To,
             };
 
-
-            await _context.AddAsync(model);
-            await _context.AddAsync(car);
-
+            await _context.AddAsync(invoice);
             await _context.SaveChangesAsync();
-
-            //try
-            //{
-            //    await _accountCreationCommandHandler.HandleAsync(accountCreationCommand);
-            //    return StatusCode(CreatedStatusCode);
-            //}
-            //catch (Exception ex)
-            //{
-            //    return Problem(ex.Message, null, InternalServerErrorCode);
-            //}
         }
-
-/*        [HttpPost("create-car")]
-        public async Task CreateCarAsync(CarCreationDto model)
-        {
-            Console.WriteLine(model);
-            await _context.AddAsync(model);
-            await _context.SaveChangesAsync();
-       
-        }*/
     }
 }
